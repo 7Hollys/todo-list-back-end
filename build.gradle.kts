@@ -11,7 +11,7 @@ plugins {
 
 group = "com.7hollys"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 configurations {
 	compileOnly {
@@ -28,11 +28,18 @@ extra["snippetsDir"] = file("build/generated-snippets")
 
 
 dependencies {
+
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	implementation("org.springframework.boot:spring-boot-starter-hateoas")
+
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.security:spring-security-oauth2-jose")
+	implementation ("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -45,14 +52,18 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
-//	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
 	testImplementation("org.springframework.security:spring-security-test")
 
-
-
 	val swaggerVersion = "2.9.2"
-	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
-	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+//	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+//	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+
+//	implementation("io.jsonwebtoken:jjwt-jackson:0.9.1")
+
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+
+
 }
 
 tasks.withType<Test> {
@@ -66,11 +77,3 @@ tasks.withType<KotlinCompile> {
 	}
 }
 
-//tasks.test {
-//	outputs.dir(snippetsDir)
-//}
-//
-//tasks.asciidoctor {
-//	inputs.dir(snippetsDir)
-//	dependsOn(test)
-//}

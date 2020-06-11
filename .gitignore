@@ -32,3 +32,8 @@ out/
 .vscode/
 
 application.yml
+
+# mac
+.Ds_store
+
+
