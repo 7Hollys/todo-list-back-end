@@ -1,33 +1,23 @@
 package com.hollys.todoList.config
 
-import com.hollys.todoList.auth.CustomOAuth2ClientProperties
-import com.hollys.todoList.auth.CustomOAuth2Provider
 import com.hollys.todoList.auth.misc.*
 import com.hollys.todoList.domain.service.CustomOAuth2UserService
 import com.hollys.todoList.domain.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.client.registration.ClientRegistration
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.csrf.CsrfFilter
-import org.springframework.web.filter.CharacterEncodingFilter
-
 
 
 /**
@@ -35,19 +25,19 @@ import org.springframework.web.filter.CharacterEncodingFilter
  */
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
+class SecurityConfigure(
         @Autowired val userService: UserService,
         @Autowired val tokenAuthenticationFilter: TokenAuthenticationFilter,
         @Autowired val customOAuth2UserService: CustomOAuth2UserService,
         @Autowired val oAuth2SuccessHandler: OAuth2SuccessHandler,
         @Autowired val oAuth2RequestRepository: OAuth2RequestRepository,
         @Autowired val oAuth2FailureHandler: OAuth2FailureHandler
-) : WebSecurityConfigurerAdapter() {
-
-
-
-
-
+): WebSecurityConfigurerAdapter() {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder? {
@@ -81,7 +71,7 @@ class SecurityConfig(
                 .and().authorizeRequests()
                 .antMatchers("/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/account/**", "/api/docs/**", "/api/docs.yaml", "/oauth2/**", "/login/oauth2/code/**").permitAll()
-                .antMatchers("/login").permitAll()
+//                .antMatchers("/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -96,9 +86,10 @@ class SecurityConfig(
                     oauth2Login.successHandler(oAuth2SuccessHandler).failureHandler(oAuth2FailureHandler)
                 }
 
-        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+//        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
     }
+
 
 
 

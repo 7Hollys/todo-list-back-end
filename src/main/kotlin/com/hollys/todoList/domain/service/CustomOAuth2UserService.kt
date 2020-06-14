@@ -19,11 +19,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import java.util.*
 
+//@RequiredArgsConstructor
 @Service
+//@Component
 class CustomOAuth2UserService(@Autowired private val userRepository: UserRepository) : DefaultOAuth2UserService() {
 
     @Throws(OAuth2AuthenticationException::class)
     override fun loadUser(oAuth2UserRequest: OAuth2UserRequest): OAuth2User {
+
         val oAuth2User = super.loadUser(oAuth2UserRequest)
         return try {
             processOAuth2User(oAuth2UserRequest, oAuth2User)
@@ -66,7 +69,8 @@ class CustomOAuth2UserService(@Autowired private val userRepository: UserReposit
                 emailVerified = true,
                 createdAt = Date(),
                 updatedAt = Date(),
-                roles ="ROLE_USER"
+                roles ="ROLE_USER",
+                uuid = UUID.randomUUID()
         )
         return UserEntityMapper.to(userRepository.save(user))
     }

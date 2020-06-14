@@ -21,7 +21,7 @@ class OAuth2RequestRepository: AuthorizationRequestRepository<OAuth2Authorizatio
         CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
         CookieUtils.deleteCookie(request, response, REDIRECT_URL_PARAM_COOKIE_NAME);
     }
-
+// 승인 요청 저장
     override fun saveAuthorizationRequest(authorizationRequest: OAuth2AuthorizationRequest?, request: HttpServletRequest, response: HttpServletResponse) {
         authorizationRequest?.let {
             CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtils.serialize(authorizationRequest), cookieExpireSeconds)

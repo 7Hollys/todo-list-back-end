@@ -41,14 +41,15 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
         if (redirectUrl.isEmpty() && !isAuthorizedRedirectUrl(redirectUrl)) {
             throw BadRequestException("Sorry! We've got an Unauthorized Redirect URL and can't proceed with the authentication")
         }
-
+//  redirectURL = http://localhost:4200/auth/token?token=  createToken
         return UriComponentsBuilder.fromUriString(redirectUrl)
                 .queryParam("token", tokenProvider.createToken(authentication))
                 .build().toUriString()
     }
-
+   // 인증 속성 지움
     private fun clearAuthenticationAttributes(request: HttpServletRequest, response: HttpServletResponse) {
         super.clearAuthenticationAttributes(request)
+       // 승인 요청 쿠키 지움
         oAuth2RequestRepository.removeAuthorizationRequestCookies(request, response)
     }
 

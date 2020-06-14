@@ -9,7 +9,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "USER")
-@Data
+//@Data
 data class User(
         @Id val id: Long? = null,
         val name: String,
@@ -21,7 +21,8 @@ data class User(
         val providerId: String,
         val roles: String,
         val createdAt: Date,
-        val updatedAt: Date
+        val updatedAt: Date,
+        val uuid: UUID
 
 ) {
 
@@ -78,8 +79,6 @@ data class User(
 }
 
 
-
-
 object UserEntityMapper {
     fun from(user: UserModel): User = User(
             id = user.id,
@@ -92,7 +91,8 @@ object UserEntityMapper {
             roles = user.roles,
             createdAt = user.createdAt,
             updatedAt = user.updateAt,
-            profileImage = user.profileImage
+            profileImage = user.profileImage,
+            uuid = user.uuid
     )
 
     fun to(user: User): UserModel = UserModel(
@@ -106,6 +106,7 @@ object UserEntityMapper {
             roles = user.roles,
             createdAt = user.createdAt,
             updateAt = user.updatedAt,
-            profileImage = user.profileImage
+            profileImage = user.profileImage,
+            uuid = user.uuid
     )
 }

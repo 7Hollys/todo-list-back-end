@@ -61,7 +61,7 @@ fun rolesToAuthority(roles: String): Collection<GrantedAuthority>{
     val authorises = ArrayList<GrantedAuthority>()
 
     roles.map {
-//        authorises.add(SimpleGrantedAuthority(it))
+        authorises.add(SimpleGrantedAuthority(it.toString()))
     }
     return authorises
 }

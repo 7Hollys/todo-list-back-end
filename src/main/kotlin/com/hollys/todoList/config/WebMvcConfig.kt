@@ -7,9 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebMvcConfig : WebMvcConfigurer {
-
-    private val MAX_AGE_SECS: Long = 3600
-
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
@@ -17,5 +14,9 @@ class WebMvcConfig : WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(MAX_AGE_SECS)
+    }
+
+    companion object{
+        const val MAX_AGE_SECS: Long = 3600
     }
 }

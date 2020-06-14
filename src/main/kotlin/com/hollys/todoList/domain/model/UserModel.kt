@@ -10,6 +10,7 @@ data class UserModel(val id: Long? = null,
                      val accountLocked: Boolean = false,
                      val provider: AuthProvider,
                      val providerId: String,
-                     val roles: String ,
+                     val roles: String,
                      val createdAt: Date,
-                     val updateAt: Date)
+                     val updateAt: Date,
+                     val uuid: UUID)
