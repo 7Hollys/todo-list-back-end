@@ -17,7 +17,10 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.csrf.CsrfFilter
+import org.springframework.web.filter.CharacterEncodingFilter
 
 
 /**
@@ -37,7 +40,7 @@ class SecurityConfigure(
         @Autowired val oAuth2SuccessHandler: OAuth2SuccessHandler,
         @Autowired val oAuth2RequestRepository: OAuth2RequestRepository,
         @Autowired val oAuth2FailureHandler: OAuth2FailureHandler
-): WebSecurityConfigurerAdapter() {
+) : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder? {
@@ -91,19 +94,10 @@ class SecurityConfigure(
     }
 
 
-
-
-
-
-
-
-
-
-
-
 //    override fun configure(http: HttpSecurity) {
 //
-//        http
+//        http.cors()
+//                .and()
 //                // URI 접근과 관련된 설정입니다.
 //                .authorizeRequests()
 //                .antMatchers("/", "/login/**", "/oauth2/**", "/images/**").permitAll()
@@ -112,6 +106,9 @@ class SecurityConfigure(
 //                // OAuth2 적용 관련 설정입니다.
 //                .and()
 //                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                .and()
 //                .defaultSuccessUrl("/login/complelte")
 //
 //                // Iframe 사용 허용합니다.
@@ -198,11 +195,6 @@ class SecurityConfigure(
 //            else -> null
 //        }
 //    }
-
-
-
-
-
 
 
 }

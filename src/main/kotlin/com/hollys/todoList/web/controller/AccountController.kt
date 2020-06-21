@@ -64,7 +64,7 @@ class AccountController(
                 providerId = "",
                 provider = AuthProvider.local,
                 createdAt = Date(),
-                updateAt = Date(),
+                updatedAt = Date(),
                 uuid = UUID.randomUUID()
         )
         val result = userService.saveUser(user)

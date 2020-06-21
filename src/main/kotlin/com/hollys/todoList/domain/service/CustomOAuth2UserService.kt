@@ -1,5 +1,6 @@
 package com.hollys.todoList.domain.service
 
+import com.hollys.todoList.auth.util.OAuth2UserInfo
 import com.hollys.todoList.auth.util.OAuth2UserInfoFactory.getOAuth2UserInfo
 import com.hollys.todoList.auth.util.UserPrincipal
 import com.hollys.todoList.domain.model.AuthProvider
@@ -19,15 +20,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import java.util.*
 
-//@RequiredArgsConstructor
+
 @Service
-//@Component
 class CustomOAuth2UserService(@Autowired private val userRepository: UserRepository) : DefaultOAuth2UserService() {
 
     @Throws(OAuth2AuthenticationException::class)
     override fun loadUser(oAuth2UserRequest: OAuth2UserRequest): OAuth2User {
+        val oAuth2User: OAuth2User = super.loadUser(oAuth2UserRequest)
 
-        val oAuth2User = super.loadUser(oAuth2UserRequest)
         return try {
             processOAuth2User(oAuth2UserRequest, oAuth2User)
         } catch (ex: AuthenticationException) {
@@ -43,6 +43,7 @@ class CustomOAuth2UserService(@Autowired private val userRepository: UserReposit
             throw OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider")
         }
         var user: UserModel? = userRepository.findByEmail(oAuth2UserInfo.getEmail()).map(UserEntityMapper::to).toNullable()
+//        var user: UserModel? = UserEntityMapper.to(userRepository.findByEmail(oAuth2UserInfo.getEmail()))
 
         user?.let {
             if (it.provider != AuthProvider.valueOf(oAuth2UserRequest.clientRegistration.registrationId)) {
@@ -56,9 +57,10 @@ class CustomOAuth2UserService(@Autowired private val userRepository: UserReposit
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo)
         }
         return UserPrincipal.create(user!!, oAuth2User.attributes, rolesToAuthority(user!!.roles))
+//        return oAuth2User
     }
 
-    private fun registerNewUser(oAuth2UserRequest: OAuth2UserRequest, oAuth2UserInfo: com.hollys.todoList.auth.util.OAuth2UserInfo): UserModel {
+    private fun registerNewUser(oAuth2UserRequest: OAuth2UserRequest, oAuth2UserInfo: OAuth2UserInfo): UserModel {
         val user = User(
                 id = null,
                 provider = AuthProvider.valueOf(oAuth2UserRequest.clientRegistration.registrationId),
@@ -67,18 +69,19 @@ class CustomOAuth2UserService(@Autowired private val userRepository: UserReposit
                 email = oAuth2UserInfo.getEmail(),
                 profileImage = oAuth2UserInfo.getImageUrl() ?: "",
                 emailVerified = true,
+//                accountLocked = false,
                 createdAt = Date(),
                 updatedAt = Date(),
-                roles ="ROLE_USER",
+                roles = "ROLE_USER",
                 uuid = UUID.randomUUID()
         )
         return UserEntityMapper.to(userRepository.save(user))
     }
 
-    private fun updateExistingUser(existingUser: UserModel, oAuth2UserInfo: com.hollys.todoList.auth.util.OAuth2UserInfo): UserModel {
+    private fun updateExistingUser(existingUser: UserModel, oAuth2UserInfo: OAuth2UserInfo): UserModel {
         val user = existingUser.copy(
                 name = oAuth2UserInfo.getName(),
-                updateAt = Date()
+                updatedAt = Date()
         )
         return UserEntityMapper.to(userRepository.save(UserEntityMapper.from(user)))
     }

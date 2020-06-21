@@ -4,14 +4,15 @@ import com.hollys.todoList.domain.model.UserModel
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.oauth2.core.user.OAuth2User
+import java.util.*
 
 class UserPrincipal(val id: Long, val mEmail: String,  val mAuthorities: Collection<GrantedAuthority?>,
-                    val mAttributes: Map<String, Any>, val mName: String, val profileImage: String) : OAuth2User, UserDetails {
+                    val mAttributes: Map<String, Any>, val mName: String, val profileImage: String, val uuid :UUID) : OAuth2User, UserDetails {
 
     companion object {
         fun create(userModel: UserModel, attributes: Map<String, Any>, authorities: Collection<GrantedAuthority?>): UserPrincipal {
             return UserPrincipal(id = userModel.id!!, mEmail = userModel.email,
-                    mAttributes = attributes, mAuthorities = authorities, mName = userModel.name, profileImage = userModel.profileImage)
+                    mAttributes = attributes, mAuthorities = authorities, mName = userModel.name, profileImage = userModel.profileImage, uuid = userModel.uuid )
         }
 
     }

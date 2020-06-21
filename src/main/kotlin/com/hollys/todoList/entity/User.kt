@@ -8,15 +8,17 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "USER")
+@Table(name = "`USER`")
 //@Data
 data class User(
-        @Id val id: Long? = null,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long?,
         val name: String,
         val email: String,
         val profileImage: String,
-        val emailVerified: Boolean = false,
-        val accountLocked: Boolean = false,
+        val emailVerified: Boolean,
+//        val accountLocked: Boolean = false,
         val provider: AuthProvider,
         val providerId: String,
         val roles: String,
@@ -68,7 +70,7 @@ data class User(
 //    @Column(name = "UPDATE_AT")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private val updateAt: Instant? = null
+//    private val updatedAt: Instant? = null
 //
 //    @Column(name = "DROP_AT")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -85,12 +87,12 @@ object UserEntityMapper {
             email = user.email,
             name = user.name,
             emailVerified = user.emailVerified,
-            accountLocked = user.accountLocked,
+//            accountLocked = user.accountLocked,
             provider = user.provider,
             providerId = user.providerId,
             roles = user.roles,
             createdAt = user.createdAt,
-            updatedAt = user.updateAt,
+            updatedAt = user.updatedAt,
             profileImage = user.profileImage,
             uuid = user.uuid
     )
@@ -100,12 +102,12 @@ object UserEntityMapper {
             email = user.email,
             name = user.name,
             emailVerified = user.emailVerified,
-            accountLocked = user.accountLocked,
+//            accountLocked = user.accountLocked,
             provider = user.provider,
             providerId = user.providerId,
             roles = user.roles,
             createdAt = user.createdAt,
-            updateAt = user.updatedAt,
+            updatedAt = user.updatedAt,
             profileImage = user.profileImage,
             uuid = user.uuid
     )

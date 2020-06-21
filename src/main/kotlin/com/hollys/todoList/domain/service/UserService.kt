@@ -3,6 +3,7 @@ package com.hollys.todoList.domain.service
 import com.hollys.todoList.auth.util.UserPrincipal
 import com.hollys.todoList.repo.UserRepository
 import com.hollys.todoList.domain.model.UserModel
+import com.hollys.todoList.entity.User
 import com.hollys.todoList.entity.UserEntityMapper
 import com.hollys.todoList.util.ResourceNotFoundException
 import com.hollys.todoList.util.toNullable
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service("userService")
 class UserServiceImpl(
         @Autowired val userRepository: UserRepository
-): UserService {
+) : UserService {
 
     @Throws(UsernameNotFoundException::class)
     override fun getUserById(id: String): UserDetails? {
@@ -34,7 +35,14 @@ class UserServiceImpl(
             return UserPrincipal.create(it, emptyMap(), rolesToAuthority(it.roles))
         }
         throw ResourceNotFoundException("User", "email", email)
+
+//        val user: User = userRepository.findByEmail(email);
+//        val userDate: UserModel = UserEntityMapper.to(user)
+//        return UserPrincipal.create(userDate, emptyMap(), rolesToAuthority(user.roles))
+//        throw ResourceNotFoundException("User", "email", email)
     }
+
+//        userRepository.findByEmail(email);
 
     override fun saveUser(model: UserModel): UserModel {
         return UserEntityMapper.to(userRepository.save(UserEntityMapper.from(model)))
@@ -50,14 +58,14 @@ class UserServiceImpl(
 
 }
 
-interface UserService: UserDetailsService {
+interface UserService : UserDetailsService {
     fun getUserById(id: String): UserDetails?
     fun getUserByEmail(email: String): UserDetails?
     fun saveUser(model: UserModel): UserModel
     fun existsByEmail(email: String): Boolean
 }
 
-fun rolesToAuthority(roles: String): Collection<GrantedAuthority>{
+fun rolesToAuthority(roles: String): Collection<GrantedAuthority> {
     val authorises = ArrayList<GrantedAuthority>()
 
     roles.map {
