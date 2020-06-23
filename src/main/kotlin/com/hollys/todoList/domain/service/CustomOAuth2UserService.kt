@@ -69,10 +69,11 @@ class CustomOAuth2UserService(@Autowired private val userRepository: UserReposit
                 email = oAuth2UserInfo.getEmail(),
                 profileImage = oAuth2UserInfo.getImageUrl() ?: "",
                 emailVerified = true,
-//                accountLocked = false,
+                accountLocked = false,
                 createdAt = Date(),
                 updatedAt = Date(),
                 roles = "ROLE_USER",
+//                dropAt = Date(),
                 uuid = UUID.randomUUID()
         )
         return UserEntityMapper.to(userRepository.save(user))

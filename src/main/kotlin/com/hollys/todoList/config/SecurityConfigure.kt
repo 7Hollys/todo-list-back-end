@@ -74,7 +74,7 @@ class SecurityConfigure(
                 .and().authorizeRequests()
                 .antMatchers("/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/account/**", "/api/docs/**", "/api/docs.yaml", "/oauth2/**", "/login/oauth2/code/**").permitAll()
-//                .antMatchers("/login").permitAll()
+                .antMatchers("/login", "api/test").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -89,7 +89,7 @@ class SecurityConfigure(
                     oauth2Login.successHandler(oAuth2SuccessHandler).failureHandler(oAuth2FailureHandler)
                 }
 
-//        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
     }
 

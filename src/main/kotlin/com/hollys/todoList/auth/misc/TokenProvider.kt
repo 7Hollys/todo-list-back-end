@@ -32,11 +32,12 @@ class TokenProvider(private val appProperties: AppProperties) {
         val jsonString = """{"type":"Foo","data":[{"id":1,"title":"Hello"},{"id":2,"title":"World"}]}"""
         return Jwts.builder()
 //                .setSubject(listOf("email" to userInfo.get("email"), "name" to userInfo.get("name"), "picture" to userInfo.get("picture"), "locale" to userInfo.get("locale")).toString())
-                .setId(userPrincipal.uuid.toString())
-                .setSubject(userPrincipal.name)
+                .setId(userPrincipal.id.toString())
+//                .setSubject(userPrincipal.name)
+                .setSubject(userPrincipal.id.toString())
                 .setIssuedAt(Date())
                 .setExpiration(expiryDate)
-                .claim("user-info", jsonString)
+//                .claim("user-info", jsonString)
                 .signWith(SignatureAlgorithm.HS512, appProperties.auth.tokenSecret)
                 .compact()
     }
@@ -44,7 +45,7 @@ class TokenProvider(private val appProperties: AppProperties) {
     fun getUserIdFromToken(token: String?): String {
         return Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(token).body.subject
     }
-
+// 토큰 검증
     fun validateToken(authToken: String?): Boolean {
         return try {
             Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(authToken)

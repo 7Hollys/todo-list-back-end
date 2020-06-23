@@ -1,85 +1,69 @@
 package com.hollys.todoList.entity
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.hollys.todoList.domain.model.AuthProvider
 import com.hollys.todoList.domain.model.UserModel
-import lombok.Data
+import org.springframework.format.annotation.DateTimeFormat
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotNull
 
 
 @Entity
 @Table(name = "`USER`")
-//@Data
 data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long?,
-        val name: String,
-        val email: String,
-        val profileImage: String,
-        val emailVerified: Boolean,
-//        val accountLocked: Boolean = false,
-        val provider: AuthProvider,
-        val providerId: String,
-        val roles: String,
-        val createdAt: Date,
-        val updatedAt: Date,
-        val uuid: UUID
 
+        @Column(name = "name")
+        val name: String,
+
+        @Email
+        @Column(name = "email", nullable = false)
+        val email: String,
+
+        @Column(name = "email_verified")
+        val emailVerified: Boolean,
+
+        @Column(name = "account_locked")
+        val accountLocked: Boolean,
+
+        @Column(name = "profile_image")
+        val profileImage: String,
+
+        @NotNull
+        @Enumerated(EnumType.STRING)
+        @Column(name = "provider")
+        val provider: AuthProvider,
+
+        @Column(name = "provider_id")
+        val providerId: String,
+
+        @Column(name = "roles")
+        val roles: String,
+
+        @Column(name = "created_at")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        val createdAt: Date,
+
+        @Column(name = "updated_at")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        val updatedAt: Date,
+
+//        @Column(name = "drop_at")
+//        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//        val dropAt: Date,
+
+        @Column(name = "uuid")
+        val uuid: UUID
 ) {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private val id: Long? = null
-//
-//    @Email
-//    @Column(name = "EMAIL", nullable = false)
-//    private val email: String? = null
-//
-//    @Column(name = "EMAIL_VERIFIED")
-//    private val emailVerified: String? = null
-//
-//    @Column(name = "ACCOUNT_LOCKED")
-//    private val accountLocked: String? = null
-//
-//    @NotNull
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "PROVIDER")
-//    private val provider: String? = null
-//
-//    @Column(name = "PROVIDER_ID")
-//    private val providerId: String? = null
-//
-//    @Column(name = "name", nullable = false)
-//    private val name: String? = null
-//
-//    @Column(name = "TYPE")
-//    private val type: Long? = null
-//
-//    @Column(name = "PROFILE_IMAGE")
-//    private val profileImage: String? = null
-//
-//    @Column(name = "roles")
-//    private val roles: String? = null
-//
-//    @Column(name = "CREATE_AT")
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private val createAt: Instant? = null
-//
-//    @Column(name = "UPDATE_AT")
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private val updatedAt: Instant? = null
-//
-//    @Column(name = "DROP_AT")
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private val dropAt: Instant? = null
-
-
 }
-
 
 object UserEntityMapper {
     fun from(user: UserModel): User = User(
@@ -87,13 +71,14 @@ object UserEntityMapper {
             email = user.email,
             name = user.name,
             emailVerified = user.emailVerified,
-//            accountLocked = user.accountLocked,
+            accountLocked = user.accountLocked,
             provider = user.provider,
             providerId = user.providerId,
             roles = user.roles,
             createdAt = user.createdAt,
             updatedAt = user.updatedAt,
             profileImage = user.profileImage,
+//            dropAt = user.dropAt,
             uuid = user.uuid
     )
 
@@ -102,13 +87,14 @@ object UserEntityMapper {
             email = user.email,
             name = user.name,
             emailVerified = user.emailVerified,
-//            accountLocked = user.accountLocked,
+            accountLocked = user.accountLocked,
             provider = user.provider,
             providerId = user.providerId,
             roles = user.roles,
             createdAt = user.createdAt,
             updatedAt = user.updatedAt,
             profileImage = user.profileImage,
+//            dropAt = user.dropAt,
             uuid = user.uuid
     )
 }

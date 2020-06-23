@@ -23,6 +23,7 @@ class TokenAuthenticationFilter(@Autowired val tokenProvider: TokenProvider,
             val jwt = getJwtFromRequest(request)
             if (!jwt.isNullOrEmpty() && tokenProvider.validateToken(jwt)) {
                 val userId: String = tokenProvider.getUserIdFromToken(jwt)
+
                 val userDetails: UserDetails = userService.getUserById(userId.toString())!!
                 val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
