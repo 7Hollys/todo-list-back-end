@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.io.IOException
 import java.net.URI
+import java.util.*
 import javax.servlet.ServletException
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -31,12 +33,13 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
             return
         }
         clearAuthenticationAttributes(request, response)
+//        createdCookie(request, response, authentication);
         redirectStrategy.sendRedirect(request, response, targetUrl)
     }
 
     override fun determineTargetUrl(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication): String {
 //authentication 안에 userinfo 담김
-        val redirectUrl: String = getCookie(request!!, REDIRECT_URL_PARAM_COOKIE_NAME)?.let { return@let it.value }?:""
+        val redirectUrl: String = getCookie(request!!, REDIRECT_URL_PARAM_COOKIE_NAME)?.let { return@let it.value } ?: ""
 
         if (redirectUrl.isEmpty() && !isAuthorizedRedirectUrl(redirectUrl)) {
             throw BadRequestException("Sorry! We've got an Unauthorized Redirect URL and can't proceed with the authentication")
@@ -46,24 +49,32 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
                 .queryParam("token", tokenProvider.createToken(authentication))
                 .build().toUriString()
     }
-   // 인증 속성 지움
+
+    // 인증 속성 지움
     private fun clearAuthenticationAttributes(request: HttpServletRequest, response: HttpServletResponse) {
         super.clearAuthenticationAttributes(request)
-       // 승인 요청 쿠키 지움
+        // 승인 요청 쿠키 지움
         oAuth2RequestRepository.removeAuthorizationRequestCookies(request, response)
     }
 
-    private fun isAuthorizedRedirectUrl(uri:String): Boolean {
+    private fun isAuthorizedRedirectUrl(uri: String): Boolean {
 
         val clientRedirectUri = URI.create(uri)
-        appProperties.oauth2.authorizedRedirectUrls.map{
+        appProperties.oauth2.authorizedRedirectUrls.map {
             val authorizedURL = URI.create(it)
-            if(authorizedURL.host.toUpperCase() == clientRedirectUri.host.toUpperCase()) {
+            if (authorizedURL.host.toUpperCase() == clientRedirectUri.host.toUpperCase()) {
                 return true
             }
         }
         return false
     }
+
+//    private fun createdCookie(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication) {
+//        val cookie = Cookie("JWT", authentication.principal as String?)
+//        cookie.isHttpOnly = true
+//        cookie.maxAge = appProperties.auth.tokenExpirationMsec.toInt()
+//        response.addCookie(cookie)
+//    }
 
 }
 
