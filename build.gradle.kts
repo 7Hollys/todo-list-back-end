@@ -7,6 +7,7 @@ plugins {
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
 	kotlin("plugin.jpa") version "1.3.72"
+	id ("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 }
 
 group = "com.7hollys"
@@ -63,6 +64,8 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
+	implementation("com.querydsl:querydsl-jpa")
+	implementation("com.querydsl:querydsl-apt")
 
 }
 
@@ -76,4 +79,35 @@ tasks.withType<KotlinCompile> {
 		jvmTarget = "1.8"
 	}
 }
+
+
+
+//// queryDsl 적용
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+////	developmentOnly
+////	runtimeClasspath {
+////		extendsFrom developmentOnly
+////	}
+//}
+//val querydslSrcDir = "target/generated-sources/java"
+//sourceSets {
+//	main {
+//		java {
+//			srcDirs = ["src/main/java", querydslSrcDir]
+//		}
+//	}
+//}
+//querydsl {
+//	library = "com.querydsl:querydsl-apt"
+//	jpa = true
+//	querydslSourcesDir = querydslSrcDir
+//}
+//compileQuerydsl{
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+
+
+
+
 
