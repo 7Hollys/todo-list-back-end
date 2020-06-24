@@ -25,15 +25,20 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
                            @Autowired val oAuth2RequestRepository: OAuth2RequestRepository)
 
     : SimpleUrlAuthenticationSuccessHandler() {
+    private var jwtToken: String? = null
 
     override fun onAuthenticationSuccess(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication) {
         val targetUrl = determineTargetUrl(request, response, authentication)
-
         if (response.isCommitted) {
             return
         }
         clearAuthenticationAttributes(request, response)
-//        createdCookie(request, response, authentication);
+
+        val cookie = Cookie("JWT", jwtToken)
+        cookie.isHttpOnly = true
+        cookie.maxAge = appProperties.auth.tokenExpirationMsec.toInt()
+        response.addCookie(cookie)
+
         redirectStrategy.sendRedirect(request, response, targetUrl)
     }
 
@@ -44,9 +49,11 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
         if (redirectUrl.isEmpty() && !isAuthorizedRedirectUrl(redirectUrl)) {
             throw BadRequestException("Sorry! We've got an Unauthorized Redirect URL and can't proceed with the authentication")
         }
+        jwtToken = tokenProvider.createToken(authentication)
+
 //  redirectURL = http://localhost:4200/auth/token?token=  createToken
         return UriComponentsBuilder.fromUriString(redirectUrl)
-                .queryParam("token", tokenProvider.createToken(authentication))
+                .queryParam("token", jwtToken)
                 .build().toUriString()
     }
 
@@ -69,12 +76,6 @@ class OAuth2SuccessHandler(@Autowired val tokenProvider: TokenProvider,
         return false
     }
 
-//    private fun createdCookie(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication) {
-//        val cookie = Cookie("JWT", authentication.principal as String?)
-//        cookie.isHttpOnly = true
-//        cookie.maxAge = appProperties.auth.tokenExpirationMsec.toInt()
-//        response.addCookie(cookie)
-//    }
 
 }
 

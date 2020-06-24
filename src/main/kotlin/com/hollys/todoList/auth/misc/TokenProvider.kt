@@ -33,8 +33,7 @@ class TokenProvider(private val appProperties: AppProperties) {
         return Jwts.builder()
 //                .setSubject(listOf("email" to userInfo.get("email"), "name" to userInfo.get("name"), "picture" to userInfo.get("picture"), "locale" to userInfo.get("locale")).toString())
                 .setId(userPrincipal.id.toString())
-//                .setSubject(userPrincipal.name)
-                .setSubject(userPrincipal.id.toString())
+                .setSubject(userPrincipal.name)
                 .setIssuedAt(Date())
                 .setExpiration(expiryDate)
 //                .claim("user-info", jsonString)
@@ -43,7 +42,7 @@ class TokenProvider(private val appProperties: AppProperties) {
     }
 
     fun getUserIdFromToken(token: String?): String {
-        return Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(token).body.subject
+        return Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(token).body.id
     }
 // 토큰 검증
     fun validateToken(authToken: String?): Boolean {
@@ -54,31 +53,6 @@ class TokenProvider(private val appProperties: AppProperties) {
             false
         }
     }
-
-
-//    fun generateToken(userPrincipal: UserPrincipal): String {
-//        val now = Date()
-//        val expiryDate = Date(now.time + appProperties.auth.tokenExpirationMsec)
-//        return Jwts.builder()
-//                .setSubject(userPrincipal.id.toString())
-//                .setIssuedAt(Date())
-//                .setExpiration(expiryDate)
-//                .signWith(SignatureAlgorithm.HS512, appProperties.auth.tokenSecret)
-//                .compact()
-//    }
-//
-//    fun getUserIdFromToken(token: String?): String {
-//        return Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(token).body.subject
-//    }
-//
-//    fun validateToken(authToken: String?): Boolean {
-//        return try {
-//            Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(authToken)
-//            true
-//        } catch (ex: Exception) {
-//            false
-//        }
-//    }
 
 
 }
