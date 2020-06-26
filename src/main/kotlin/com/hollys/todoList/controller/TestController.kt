@@ -1,7 +1,7 @@
 package com.hollys.todoList.controller
 
+import com.hollys.todoList.entity.QUser.user
 import com.hollys.todoList.entity.User
-import com.hollys.todoList.entity.UserEntityMapper
 import com.querydsl.jpa.impl.JPAQueryFactory
 import lombok.extern.slf4j.Slf4j
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 @Slf4j
 @RestController
 @RequestMapping("api")
-class TestController {
+class TestController(
+        private var queryFactory: JPAQueryFactory
+) {
 
-    private var queryFactory: JPAQueryFactory? = null
-
-    fun TestController(queryFactory: JPAQueryFactory) {
-        this.queryFactory = queryFactory
-    }
+//    fun TestController(queryFactory: JPAQueryFactory) {
+//        this.queryFactory = queryFactory
+//    }
 
     @GetMapping("test")
     fun selectLastYearAmount(): String {
@@ -26,9 +26,8 @@ class TestController {
     }
 
     @GetMapping("user_info")
-    fun selectUserInfo(): String {
-
-//        queryFactory.selectFrom(User)
-        return "Test !!!";
+    fun selectUserInfo(): List<User> {
+        val result = queryFactory.selectFrom(user).fetch()
+        return result
     }
 }

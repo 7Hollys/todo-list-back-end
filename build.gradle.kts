@@ -4,10 +4,15 @@ plugins {
 	id("org.springframework.boot") version "2.3.0.RELEASE"
 	id("io.spring.dependency-management") version "1.0.9.RELEASE"
 	id("org.asciidoctor.convert") version "1.5.8"
+	id ("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
+
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
 	kotlin("plugin.jpa") version "1.3.72"
-	id ("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
+//	kotlin("plugin.noarg") version "1.3.72"
+	kotlin("kapt") version "1.3.72"
+
+	idea
 }
 
 group = "com.7hollys"
@@ -26,22 +31,14 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 
-
-
 dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
-	implementation("org.springframework.security:spring-security-oauth2-client")
-	implementation("org.springframework.security:spring-security-oauth2-jose")
-	implementation("io.jsonwebtoken:jjwt:0.9.1")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
-
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+//	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -53,20 +50,20 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
-
 	testImplementation("org.springframework.security:spring-security-test")
 
+	implementation("org.springframework.security:spring-security-oauth2-client")
+	implementation("org.springframework.security:spring-security-oauth2-jose")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("io.jsonwebtoken:jjwt:0.9.1")
+
 	val swaggerVersion = "2.9.2"
-//	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
-//	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
-
-//	implementation("io.jsonwebtoken:jjwt-jackson:0.9.1")
-
-	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
 
 	implementation("com.querydsl:querydsl-jpa")
 	implementation("com.querydsl:querydsl-apt")
-
+	kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
 }
 
 tasks.withType<Test> {
@@ -80,34 +77,10 @@ tasks.withType<KotlinCompile> {
 	}
 }
 
-
-
-//// queryDsl 적용
-//configurations {
-//	querydsl.extendsFrom compileClasspath
-////	developmentOnly
-////	runtimeClasspath {
-////		extendsFrom developmentOnly
-////	}
-//}
-//val querydslSrcDir = "target/generated-sources/java"
-//sourceSets {
-//	main {
-//		java {
-//			srcDirs = ["src/main/java", querydslSrcDir]
-//		}
-//	}
-//}
-//querydsl {
-//	library = "com.querydsl:querydsl-apt"
-//	jpa = true
-//	querydslSourcesDir = querydslSrcDir
-//}
-//compileQuerydsl{
-//	options.annotationProcessorPath = configurations.querydsl
-//}
-
-
-
-
-
+idea {
+	module {
+		val kaptMain = file("build/generated/source/kapt/main")
+		sourceDirs.add(kaptMain)
+		generatedSourceDirs.add(kaptMain)
+	}
+}
