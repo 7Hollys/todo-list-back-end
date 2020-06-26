@@ -8,9 +8,9 @@ import javax.persistence.*
 data class TodoList(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
+        val id: Long?,
 
-        @Column(name = "user_id", nullable = false)
+        @Column(name = "user_id")
         val userId: Long,
 
         @Column(name = "contents")
@@ -22,13 +22,12 @@ data class TodoList(
         @Column(name = "is_checked")
         val isChecked: Boolean,
 
-        @Column(name = "created_at")
-        val createdAt: Date,
+        @Column(name = "created_at", insertable = false, updatable = false, nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+        val createdAt: Date?,
 
-        @Column(name = "updated_at")
-        val updatedAt: Date,
+        @Column(name = "updated_at", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        val updatedAt: Date?,
 
-        @Column(name = "deleted_at")
-        val deletedAt: Date
-        ) {
-}
+        @Column(name = "deleted_at", insertable = false, columnDefinition = "datetime")
+        val deletedAt: Date?
+)

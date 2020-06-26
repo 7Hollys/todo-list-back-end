@@ -27,7 +27,7 @@ class TestController(
 
     @GetMapping("user_info")
     fun selectUserInfo(): List<User> {
-        val result = queryFactory.selectFrom(user).fetch()
+        val result: List<User> = queryFactory.selectFrom(user).fetch()
         return result
     }
 }
