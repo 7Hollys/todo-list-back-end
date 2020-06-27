@@ -75,6 +75,7 @@ class SecurityConfigure(
                 .antMatchers("/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/account/**", "/api/docs/**", "/api/docs.yaml", "/oauth2/**", "/login/oauth2/code/**").permitAll()
                 .antMatchers("/login", "api/test").permitAll()
+                .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
