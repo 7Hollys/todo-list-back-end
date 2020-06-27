@@ -4,5 +4,5 @@ data class UserProfileResponse(
         val id: Long,
         val name: String,
         val email: String,
-        val imgUrl: String
+        val profileImage: String
 )

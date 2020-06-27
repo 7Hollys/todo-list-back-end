@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(USER_BASE_URI, consumes = ["application/json"])
+@RequestMapping(USER_BASE_URI)
 //@SafeHtml.Tag(name = "User Api", description = "This contains url related to user account")
 class UserController {
 
@@ -18,7 +18,7 @@ class UserController {
 //    @SecurityRequirement(name = "bearerAuth")
     fun getMyProfile(): ResponseEntity<UserProfileResponse> {
         val user = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
-        return ResponseEntity.ok(UserProfileResponse(id = user.id, name = user.name, email = user.mEmail, imgUrl = user.profileImage))
+        return ResponseEntity.ok(UserProfileResponse(id = user.id, name = user.name, email = user.mEmail, profileImage = user.profileImage))
     }
 
     companion object {
