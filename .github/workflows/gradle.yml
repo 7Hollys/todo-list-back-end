@@ -35,6 +35,11 @@ jobs:
       run: cp build/libs/${JAR_NAME} code-deploy-${PROJECT_NAME}/
     - name: CD JAR FOLDER
       run: cd code-deploy-${PROJECT_NAME}
+    - name: com-1
+      run: |
+        pwd
+        ls
+        ls -a
     - name: ZIP CODE DEPLOY
       run: zip ${ZIP_NAME} ${JAR_NAME}
       
