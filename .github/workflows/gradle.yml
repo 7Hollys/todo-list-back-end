@@ -30,6 +30,7 @@ jobs:
       run: |
        vi src/main/resources/application.yml
        '${{ secrets.APPLICATION }}'
+       :wq!
        ls -alh
     - name: Build with Gradle
       run: gradle bootjar
