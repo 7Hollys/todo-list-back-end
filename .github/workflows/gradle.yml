@@ -3,7 +3,7 @@ name: todo-backend-cicd
 
 on:
   push:
-    branches: [ issue-3 ]
+    branches: [ todo-ci-test ]
 #   pull_request:
 #     branches: [ master ]
 
