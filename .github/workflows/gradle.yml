@@ -6,7 +6,12 @@ on:
     branches: [ todo-ci-test ]
 #   pull_request:
 #     branches: [ master ]
-
+env:
+  PROJECT_NAME: todo-list-back-end
+  BUCKET: mys3bucket1
+  JAR_NAME: todoList-0.0.1-SNAPSHOT.jar
+  ZIP_NAME: todo.zip
+  
 jobs:
   build:
 
@@ -18,27 +23,29 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-        
-    - name: pwd
-      run: pwd
       
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
       run: gradle bootjar
       
+    - name: MAKE DEPLOYMENT DIR
+      run: mkdir -p code-deploy-${PROJECT_NAME}
+    - name: MOVE JAR
+      run: cp build/libs/${JAR_NAME} code-deploy-${PROJECT_NAME}/
+    - name: CD JAR FOLDER
+      run: cd code-deploy-${PROJECT_NAME}
+    - name: ZIP CODE DEPLOY
+      run: zip ${ZIP_NAME} ${JAR_NAME}
+      
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
         aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-        aws-region: us-east-2
+        aws-region: ap-northeast-2
 
-#     - name: Aws ec2 access
-#       run: |
-#         aws ec2 associate-iam-instance-profile --instance-id i-044feaa81bc14353e --iam-instance-profile Name="github-action"
-#         sudo docker rm -f todo
-#         sudo docker run --restart always -v /home/ec2-user/todo/todoList-0.0.1-SNAPSHOT.jar:/root/todoList-0.0.1-SNAPSHOT.jar -d --name todo -p 80:8080 openjdk:8 java -jar /root/todoList-0.0.1-SNAPSHOT.jar
-
-#     - name: Deploy
+    - name: Upload to S3
+      run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
+ 
       
