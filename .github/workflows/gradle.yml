@@ -26,6 +26,11 @@ jobs:
       
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: application.yml add
+      run: |
+       vi src/main/resources/application.yml
+       '${{ secrets.APPLICATION }}'
+       ls -alh
     - name: Build with Gradle
       run: gradle bootjar
       
