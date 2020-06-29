@@ -28,8 +28,7 @@ jobs:
       run: chmod +x gradlew
     - name: application.yml add
       run: |
-       vi src/main/resources/application.yml
-       '${{ secrets.APPLICATION }}'
+       echo '${{ secrets.APPLICATION }}' > src/main/resources/application.yml
        
     - name: file com
       run: |
