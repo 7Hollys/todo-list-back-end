@@ -6,8 +6,8 @@ files:
 
 hooks:
   BeforeInstall:
-    - location: /home/ec2-user/initialize.sh
+    - location: sh /home/ec2-user/initialize.sh
       runas: root
   AfterInstall:
-    - location: /home/ec2-user/start.sh
+    - location: sh /home/ec2-user/start.sh
       runas: root
