@@ -11,7 +11,8 @@ env:
   BUCKET: github-action-todo
   JAR_NAME: todoList-0.0.1-SNAPSHOT
   ZIP_NAME: todo
-  
+  DEPLOY_SETTING: todoSetting
+
 jobs:
   build:
 
@@ -60,4 +61,4 @@ jobs:
       run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name TodoListCodeDeploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name S3-Deploy --s3-location bucket=${BUCKET},bundleType=zip,key=deploy/${ZIP_NAME}.zip
+      run: aws deploy create-deployment --application-name S3-Deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name todo-back-end-deploy --s3-location bucket=${BUCKET}/deploy/,bundleType=zip,key=jar/${DEPLOY_SETTING}.zip
