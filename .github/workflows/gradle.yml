@@ -61,4 +61,4 @@ jobs:
       run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name S3-Deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name todo-back-end-deploy --s3-location bucket=${BUCKET}/deploy/,bundleType=zip,key=jar/${DEPLOY_SETTING}.zip
+      run: aws deploy create-deployment --application-name S3-Deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name todo-back-end-deploy --s3-location bucket=${BUCKET}/deploy,bundleType=zip,key=${DEPLOY_SETTING}.zip
