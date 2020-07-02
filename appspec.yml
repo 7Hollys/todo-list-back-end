@@ -1,0 +1,13 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/todo/
+
+hooks:
+  BeforeInstall:
+    - location: /home/ec2-user/initialize.sh
+      runas: root
+  AfterInstall:
+    - location: /home/ec2-user/start.sh
+      runas: root
