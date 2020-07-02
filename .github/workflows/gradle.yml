@@ -44,7 +44,7 @@ jobs:
 
     - name: CD JAR FOLDER AND ZIP CODE DEPLOY
       run: |
-        zip ${ZIP_NAME}.zip /code-deploy-${PROJECT_NAME}/*
+        zip ./${ZIP_NAME}.zip ./code-deploy-${PROJECT_NAME}/*
 #        cd code-deploy-${PROJECT_NAME}
 #        zip ${ZIP_NAME}.zip ${JAR_NAME}.jar
       
@@ -59,4 +59,5 @@ jobs:
 #       run: aws s3 cp code-deploy-${PROJECT_NAME}/${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
       run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
 
-      
+    - name: Code Deploy
+        run: aws deploy create-deployment --application-name TodoListCodeDeploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name S3-Deploy --s3-location bucket=${BUCKET},bundleType=zip,key=deploy/${ZIP_NAME}.zip
