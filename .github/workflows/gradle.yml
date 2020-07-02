@@ -29,23 +29,21 @@ jobs:
     - name: application.yml add
       run: |
        echo "${{ secrets.APPLICATION }}" > src/main/resources/application.yml
-       
-    - name: file com
-      run: |
-       cd src/main/resources/
-       ls -al
 
     - name: Build with Gradle
       run: gradle bootjar
       
-    - name: MAKE DEPLOYMENT DIR
-      run: mkdir -p code-deploy-${PROJECT_NAME}
-    - name: MOVE JAR
-      run: cp build/libs/${JAR_NAME}.jar code-deploy-${PROJECT_NAME}/
+#     - name: MAKE DEPLOYMENT DIR
+#       run: mkdir -p code-deploy-${PROJECT_NAME}
+      
+#     - name: MOVE JAR
+#       run: cp build/libs/${JAR_NAME}.jar code-deploy-${PROJECT_NAME}/
+      
     - name: CD JAR FOLDER AND ZIP CODE DEPLOY
       run: |
-       cd code-deploy-${PROJECT_NAME}
-       zip ${ZIP_NAME}.zip ${JAR_NAME}.jar
+        zip -r ./${ZIP_NAME}.zip .
+#        cd code-deploy-${PROJECT_NAME}
+#        zip ${ZIP_NAME}.zip ${JAR_NAME}.jar
       
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -55,6 +53,7 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp code-deploy-${PROJECT_NAME}/${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
- 
+#       run: aws s3 cp code-deploy-${PROJECT_NAME}/${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
+      run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/jar/ --region ap-northeast-2
+
       
