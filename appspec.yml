@@ -5,9 +5,6 @@ files:
     destination: /home/ec2-user/todo/
 
 hooks:
-  BeforeInstall:
-    - location: sh /home/ec2-user/initialize.sh
-      runas: root
   AfterInstall:
-    - location: sh /home/ec2-user/start.sh
+    - location: deploy.sh
       runas: root

@@ -33,15 +33,18 @@ jobs:
     - name: Build with Gradle
       run: gradle bootjar
       
-#     - name: MAKE DEPLOYMENT DIR
-#       run: mkdir -p code-deploy-${PROJECT_NAME}
-      
-#     - name: MOVE JAR
-#       run: cp build/libs/${JAR_NAME}.jar code-deploy-${PROJECT_NAME}/
-      
+    - name: MAKE DEPLOYMENT DIR
+      run: mkdir -p code-deploy-${PROJECT_NAME}
+
+    - name: MOVE JAR
+      run: |
+        cp build/libs/${JAR_NAME}.jar code-deploy-${PROJECT_NAME}/
+        cp appspec.yml code-deploy-${PROJECT_NAME}/
+        cp deploy.sh code-deploy-${PROJECT_NAME}/
+
     - name: CD JAR FOLDER AND ZIP CODE DEPLOY
       run: |
-        zip -r ./${ZIP_NAME}.zip .
+        zip ${ZIP_NAME}.zip /code-deploy-${PROJECT_NAME}/*
 #        cd code-deploy-${PROJECT_NAME}
 #        zip ${ZIP_NAME}.zip ${JAR_NAME}.jar
       
