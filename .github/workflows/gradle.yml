@@ -1,16 +1,15 @@
 name: todo-backend-cicd
 
 on:
-#   push:
-#     branches: [ todo-ci-test ]
-  pull_request:
-    branches: [ master ]
+   push:
+     branches: [ issue-5 ]
+#  pull_request:
+#    branches: [ master ]
 env:
   PROJECT_NAME: todo-list-back-end
   BUCKET: github-action-todo
   JAR_NAME: todoList-0.0.1-SNAPSHOT
   ZIP_NAME: todo
-  DEPLOY_SETTING: todoSetting
 
 jobs:
   build:
