@@ -20,7 +20,7 @@ class TestController(
         return "Test !!!";
     }
 
-    @GetMapping("cicd")
+    @GetMapping("cicd_0706")
     fun cicdTest(): String {
         return "Success CICD TODO List !!!"
     }
