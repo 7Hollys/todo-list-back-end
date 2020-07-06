@@ -20,8 +20,8 @@ class TestController(
         return "Test !!!";
     }
 
-    @GetMapping("cicd_0706")
+    @GetMapping("cicd_test")
     fun cicdTest(): String {
-        return "Success CICD TODO List !!!"
+        return "Success CICD TODO List 2020-07-06 5시"
     }
 }
