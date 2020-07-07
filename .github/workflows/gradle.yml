@@ -1,8 +1,8 @@
 name: todo-backend-cicd
 
 on:
-   push:
-     branches: [ issue-5 ]
+  push:
+    branches: [ issue-5 ]
 #  pull_request:
 #    branches: [ master ]
 env:
@@ -48,7 +48,7 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp ${ZIP_NAME}.zip s3://${BUCKET}/ --region ap-northeast-2
+      run: aws s3 cp --region ap-northeast-2 ${ZIP_NAME}.zip s3://${BUCKET}/
 
     - name: Code Deploy
       run: aws deploy create-deployment --application-name S3-Deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name todo-back-end-deploy --s3-location bucket=github-action-todo,bundleType=zip,key=todoSetting.zip
