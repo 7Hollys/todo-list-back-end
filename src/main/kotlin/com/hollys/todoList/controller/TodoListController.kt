@@ -7,6 +7,8 @@ import com.hollys.todoList.entity.QTodoList.todoList
 import com.hollys.todoList.entity.TodoList
 import com.hollys.todoList.repo.TodoListRepository
 import com.hollys.todoList.util.OAuth2AuthenticationProcessingException
+import com.hollys.todoList.util.ResourceNotFoundException
+import com.hollys.todoList.util.toNullable
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -22,6 +24,21 @@ class TodoListController(
         @Autowired private var queryFactory: JPAQueryFactory
 ) {
 
+    @DeleteMapping("delete")
+    fun delete(
+            @RequestParam("id") id: Long
+    ): ResponseEntity<Unit> {
+        val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+        val todoList: TodoList? = todoListRepository.findById(id).toNullable()
+
+        if (todoList == null)
+            throw ResourceNotFoundException("todo delete => not todoId:$id", "userId", user.id);
+        else if (user.id != todoList.userId)
+            throw OAuth2AuthenticationProcessingException("todo delete => It's not your todo")
+
+        return ResponseEntity.ok(todoListRepository.deleteById(id))
+    }
+
     @PutMapping("update")
     fun update(
             @Valid @RequestBody todoListRequest: TodoListUpdateRequest
@@ -29,7 +46,7 @@ class TodoListController(
         val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
         val todoList: Optional<TodoList> = todoListRepository.findById(todoListRequest.id)
         if (user.id != todoListRequest.userId || todoListRequest.userId != todoList.get().userId)
-            throw OAuth2AuthenticationProcessingException("It's not your writing.")
+            throw OAuth2AuthenticationProcessingException("todo update => It's not your writing")
         val modifiedTodoList = TodoList(
                 id = todoList.get().id,
                 userId = todoList.get().userId,
