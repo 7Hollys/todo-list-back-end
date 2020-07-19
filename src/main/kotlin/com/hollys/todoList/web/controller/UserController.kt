@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(USER_BASE_URI)
-//@SafeHtml.Tag(name = "User Api", description = "This contains url related to user account")
 class UserController {
 
+    companion object {
+        const val USER_BASE_URI = "/api/users"
+    }
+
     @GetMapping("/me")
-//    @SecurityRequirement(name = "bearerAuth")
     fun getMyProfile(): ResponseEntity<UserProfileResponse> {
         val user = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
         return ResponseEntity.ok(UserProfileResponse(id = user.id, name = user.name, email = user.mEmail, profileImage = user.profileImage))
     }
 
-    companion object {
-        const val USER_BASE_URI = "/api/users"
-    }
 }

@@ -15,19 +15,13 @@ import org.springframework.web.bind.annotation.RestController
 class TestController(
         private var queryFactory: JPAQueryFactory
 ) {
-
-//    fun TestController(queryFactory: JPAQueryFactory) {
-//        this.queryFactory = queryFactory
-//    }
-
     @GetMapping("test")
     fun selectLastYearAmount(): String {
         return "Test !!!";
     }
 
-    @GetMapping("user_info")
-    fun selectUserInfo(): List<User> {
-        val result: List<User> = queryFactory.selectFrom(user).fetch()
-        return result
+    @GetMapping("cicd_test")
+    fun cicdTest(): String {
+        return "Success CICD TODO List 2020-07-07 10시"
     }
 }

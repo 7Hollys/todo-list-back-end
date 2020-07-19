@@ -36,4 +36,5 @@ application.yml
 # mac
 .Ds_store
 
-
+# ETC
+todoSetting.zip
