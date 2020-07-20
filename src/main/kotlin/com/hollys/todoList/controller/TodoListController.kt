@@ -65,11 +65,18 @@ class TodoListController(
             @Valid @RequestBody todoListRequest: TodoListSaveRequest
     ): ResponseEntity<TodoList> {
         val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+        val sequence: Long = queryFactory.selectFrom(todoList)
+                .where(todoList.deletedAt.isNull, todoList.userId.eq(user.id))
+                .orderBy(todoList.sequence.desc())
+                .limit(1)
+                .fetchOne()
+                ?.sequence?.plus(1) ?: 1
+
         val registerNewTodoList = TodoList(
                 id = null,
                 userId = user.id,
                 contents = todoListRequest.contents,
-                sequence = todoListRequest.sequence,
+                sequence = sequence,
                 isChecked = todoListRequest.isChecked,
                 createdAt = Date(),
                 updatedAt = null,
@@ -87,7 +94,7 @@ class TodoListController(
         return queryFactory
                 .selectFrom(todoList)
                 .where(todoList.deletedAt.isNull, todoList.userId.eq(user.id), todoList.sequence.gt(sequence))
-                .orderBy(todoList.sequence.asc())
+                .orderBy(todoList.sequence.desc())
                 .limit(limit)
                 .fetch()
     }

@@ -1,8 +1,8 @@
 name: todo-backend-cicd
 
 on:
-#  push:
-#    branches: [ issue-5 ]
+ push:
+   branches: [ issue-7 ]
   pull_request:
     branches: [ master ]
 env:
