@@ -3,8 +3,8 @@ name: todo-backend-cicd
 on:
  push:
    branches: [ issue-7 ]
-  pull_request:
-    branches: [ master ]
+ pull_request:
+   branches: [ master ]
 env:
   PROJECT_NAME: todo-list-back-end
   BUCKET: github-action-todo
