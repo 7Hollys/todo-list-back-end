@@ -11,6 +11,7 @@ import com.hollys.todoList.util.ResourceNotFoundException
 import com.hollys.todoList.util.toNullable
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
@@ -27,16 +28,16 @@ class TodoListController(
     @DeleteMapping("delete")
     fun delete(
             @RequestParam("id") id: Long
-    ): ResponseEntity<Unit> {
-        val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
-        val todoList: TodoList? = todoListRepository.findById(id).toNullable()
+    ): ResponseEntity<HttpStatus> {
+//        val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+//        val todoList: TodoList? = todoListRepository.findById(id).toNullable()
 
-        if (todoList == null)
-            throw ResourceNotFoundException("todo delete => not todoId:$id", "userId", user.id);
-        else if (user.id != todoList.userId)
-            throw OAuth2AuthenticationProcessingException("todo delete => It's not your todo")
-
-        return ResponseEntity.ok(todoListRepository.deleteById(id))
+//        if (todoList == null)
+//            throw ResourceNotFoundException("todo delete => not todoId:$id", "userId", user.id);
+//        else if (user.id != todoList.userId)
+//            throw OAuth2AuthenticationProcessingException("todo delete => It's not your todo")
+        todoListRepository.deleteById(id)
+        return ResponseEntity.ok(HttpStatus.OK)
     }
 
     @PutMapping("update")
