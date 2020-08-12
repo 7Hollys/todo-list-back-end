@@ -6,6 +6,7 @@ import com.hollys.todoList.domain.model.UserModel
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
 import org.springframework.format.annotation.DateTimeFormat
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Email
@@ -46,19 +47,15 @@ data class User(
         val roles: String,
 
         @Column(name = "created_at")
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        val createdAt: Date,
+        val createdAt: LocalDateTime,
 
         @Column(name = "updated_at")
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        val updatedAt: Date,
+        val updatedAt: LocalDateTime,
 
 //        @Column(name = "drop_at")
 //        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//        val dropAt: Date,
+//        val dropAt: LocalDateTime,
 
         @Column(name = "uuid")
         val uuid: UUID

@@ -1,5 +1,6 @@
 package com.hollys.todoList.domain.model
 
+import java.time.LocalDateTime
 import java.util.*
 
 data class UserModel(val id: Long? = null,
@@ -11,7 +12,7 @@ data class UserModel(val id: Long? = null,
                      val provider: AuthProvider,
                      val providerId: String,
                      val roles: String,
-                     val createdAt: Date,
-                     val updatedAt: Date,
-//                     val dropAt: Date,
+                     val createdAt: LocalDateTime,
+                     val updatedAt: LocalDateTime,
+//                     val dropAt: LocalDateTime,
                      val uuid: UUID)
