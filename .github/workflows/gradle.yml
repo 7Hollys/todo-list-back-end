@@ -28,6 +28,9 @@ jobs:
     - name: application.yml add
       run: echo "${{ secrets.APPLICATION }}" > src/main/resources/application.yml
 
+    - name: firebase.json add
+      run: echo "${{ secrets.FIREBASE_JSON }}" > todo-list-438fd-firebase-adminsdk-uytvs-a2654de1ba.json
+
     - name: Build with Gradle
       run: gradle bootjar
       
