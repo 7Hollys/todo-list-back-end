@@ -40,5 +40,5 @@ application.yml
 todoSetting.zip
 
 # Firebase
-todo-list-438fd-firebase-adminsdk-uytvs-a2654de1ba.json
+src/main/resources/firebase_todo_list.json
 

@@ -14,7 +14,7 @@ class FirebaseAdminConfig {
     @Bean
     @Throws(IOException::class)
     fun createFireBaseApp() {
-        val serviceAccount = FileInputStream("todo-list-438fd-firebase-adminsdk-uytvs-a2654de1ba.json")
+        val serviceAccount = FileInputStream("src/main/resources/firebase_todo_list.json")
 
         val options = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
