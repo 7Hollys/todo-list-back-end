@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
 import java.util.*
 import javax.validation.Valid
 
@@ -63,8 +64,8 @@ class AccountController(
                 roles = "USER_ROLE",
                 providerId = "",
                 provider = AuthProvider.local,
-                createdAt = Date(),
-                updatedAt = Date(),
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
                 uuid = UUID.randomUUID()
         )
         val result = userService.saveUser(user)

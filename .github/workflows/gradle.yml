@@ -1,10 +1,10 @@
 name: todo-backend-cicd
 
 on:
-#  push:
-#    branches: [ issue-5 ]
-  pull_request:
-    branches: [ master ]
+ push:
+   branches: [ issue-7 ]
+ pull_request:
+   branches: [ master ]
 env:
   PROJECT_NAME: todo-list-back-end
   BUCKET: github-action-todo
@@ -27,6 +27,10 @@ jobs:
 
     - name: application.yml add
       run: echo "${{ secrets.APPLICATION }}" > src/main/resources/application.yml
+
+    - name: firebase.json add
+      run: echo "${{ secrets.FIREBASE_JSON }}" > src/main/resources/firebase_todo_list.json
+
 
     - name: Build with Gradle
       run: gradle bootjar

@@ -1,5 +1,6 @@
 package com.hollys.todoList.entity
 
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -23,11 +24,11 @@ data class TodoList(
         val isChecked: Boolean,
 
         @Column(name = "created_at", insertable = false, updatable = false, nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-        val createdAt: Date?,
+        val createdAt: LocalDateTime?,
 
         @Column(name = "updated_at", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-        val updatedAt: Date?,
+        val updatedAt: LocalDateTime?,
 
         @Column(name = "deleted_at", insertable = false, columnDefinition = "datetime")
-        val deletedAt: Date?
+        val deletedAt: LocalDateTime?
 )

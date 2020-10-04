@@ -18,4 +18,9 @@ interface TodoListRepository : JpaRepository<TodoList, Long> {
     @Query(value = "update TodoList a set a.deletedAt = :deletedAt where a.id = :id", nativeQuery = false)
     fun updateToDelete(@Param("deletedAt") deletedAt: Instant, @Param("id") id: Long)
 
+//    @Transactional
+//    @Modifying
+//    @Query(value = "delete from TodoList a where a.id = :id", nativeQuery = false)
+//    override fun deleteById(@Param("id") id: Long)
+
 }

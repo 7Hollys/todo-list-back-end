@@ -11,9 +11,11 @@ import com.hollys.todoList.util.ResourceNotFoundException
 import com.hollys.todoList.util.toNullable
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 import java.util.*
 import javax.validation.Valid
 
@@ -21,13 +23,12 @@ import javax.validation.Valid
 @RequestMapping("api/todo_list")
 class TodoListController(
         @Autowired private val todoListRepository: TodoListRepository,
-        @Autowired private var queryFactory: JPAQueryFactory
+        @Autowired private val queryFactory: JPAQueryFactory
 ) {
-
     @DeleteMapping("delete")
     fun delete(
             @RequestParam("id") id: Long
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<HttpStatus> {
         val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
         val todoList: TodoList? = todoListRepository.findById(id).toNullable()
 
@@ -35,8 +36,8 @@ class TodoListController(
             throw ResourceNotFoundException("todo delete => not todoId:$id", "userId", user.id);
         else if (user.id != todoList.userId)
             throw OAuth2AuthenticationProcessingException("todo delete => It's not your todo")
-
-        return ResponseEntity.ok(todoListRepository.deleteById(id))
+        todoListRepository.deleteById(id)
+        return ResponseEntity.ok(HttpStatus.OK)
     }
 
     @PutMapping("update")
@@ -54,7 +55,7 @@ class TodoListController(
                 sequence = todoListRequest.sequence,
                 isChecked = todoListRequest.isChecked,
                 createdAt = todoList.get().createdAt,
-                updatedAt = Date(),
+                updatedAt = LocalDateTime.now(),
                 deletedAt = null
         )
         return ResponseEntity.ok(todoListRepository.save(modifiedTodoList))
@@ -65,13 +66,20 @@ class TodoListController(
             @Valid @RequestBody todoListRequest: TodoListSaveRequest
     ): ResponseEntity<TodoList> {
         val user: UserPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+        val sequence: Long = queryFactory.selectFrom(todoList)
+                .where(todoList.deletedAt.isNull, todoList.userId.eq(user.id))
+                .orderBy(todoList.sequence.desc())
+                .limit(1)
+                .fetchOne()
+                ?.sequence?.plus(1) ?: 1
+
         val registerNewTodoList = TodoList(
                 id = null,
                 userId = user.id,
                 contents = todoListRequest.contents,
-                sequence = todoListRequest.sequence,
+                sequence = sequence,
                 isChecked = todoListRequest.isChecked,
-                createdAt = Date(),
+                createdAt = LocalDateTime.now(),
                 updatedAt = null,
                 deletedAt = null
         )
@@ -87,10 +95,9 @@ class TodoListController(
         return queryFactory
                 .selectFrom(todoList)
                 .where(todoList.deletedAt.isNull, todoList.userId.eq(user.id), todoList.sequence.gt(sequence))
-                .orderBy(todoList.sequence.asc())
+                .orderBy(todoList.sequence.desc())
                 .limit(limit)
                 .fetch()
     }
-
 
 }

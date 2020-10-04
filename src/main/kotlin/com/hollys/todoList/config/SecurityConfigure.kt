@@ -17,10 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.csrf.CsrfFilter
-import org.springframework.web.filter.CharacterEncodingFilter
 
 
 /**
@@ -74,7 +71,7 @@ class SecurityConfigure(
                 .and().authorizeRequests()
                 .antMatchers("/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/account/**", "/api/docs/**", "/api/docs.yaml", "/oauth2/**", "/login/oauth2/code/**").permitAll()
-                .antMatchers("/login", "api/test").permitAll()
+                .antMatchers("/login", "/api/test", "/api/login").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
                 .anyRequest()
                 .authenticated()
