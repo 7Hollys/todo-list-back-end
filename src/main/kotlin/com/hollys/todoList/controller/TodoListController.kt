@@ -23,9 +23,8 @@ import javax.validation.Valid
 @RequestMapping("api/todo_list")
 class TodoListController(
         @Autowired private val todoListRepository: TodoListRepository,
-        @Autowired private var queryFactory: JPAQueryFactory
+        @Autowired private val queryFactory: JPAQueryFactory
 ) {
-
     @DeleteMapping("delete")
     fun delete(
             @RequestParam("id") id: Long
@@ -100,6 +99,5 @@ class TodoListController(
                 .limit(limit)
                 .fetch()
     }
-
 
 }

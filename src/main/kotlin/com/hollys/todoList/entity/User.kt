@@ -1,11 +1,7 @@
 package com.hollys.todoList.entity
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.hollys.todoList.domain.model.AuthProvider
 import com.hollys.todoList.domain.model.UserModel
-import lombok.AccessLevel
-import lombok.NoArgsConstructor
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -59,9 +55,7 @@ data class User(
 
         @Column(name = "uuid")
         val uuid: UUID
-) {
-
-}
+)
 
 object UserEntityMapper {
     fun from(user: UserModel): User = User(

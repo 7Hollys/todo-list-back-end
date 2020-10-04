@@ -38,6 +38,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 //	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -64,6 +65,11 @@ dependencies {
 	implementation("com.querydsl:querydsl-jpa")
 	implementation("com.querydsl:querydsl-apt")
 	kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
+
+
+//	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+	implementation("com.google.code.gson:gson")
+	implementation("com.google.firebase:firebase-admin:6.8.1")
 }
 
 tasks.withType<Test> {
