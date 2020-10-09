@@ -1,16 +1,19 @@
 version: '3.8'
 
 services:
-  todo:
+  backend:
     image: openjdk:8
     restart: always
+    networks:
+        - network
     volumes:
         - /home/ubuntu/todo/todoList-0.0.1-SNAPSHOT.jar:/root/todoList-0.0.1-SNAPSHOT.jar
-    ports:
-        - target: 8080
-          published: 80
-          protocol: tcp
-          mode: host
+        - /home/ubuntu/todo/firebase.json:/root/firebase.json
+    # ports:
+    #     - target: 8080
+    #       published: 80
+    #       protocol: tcp
+    #       mode: host
     entrypoint: java -jar /root/todoList-0.0.1-SNAPSHOT.jar
     deploy:
         mode: replicated
@@ -22,3 +25,7 @@ services:
         driver: syslog
         options:
             tag: "todo/{{.ID}}"
+networks:
+    network:
+        driver: overlay
+        attachable: true

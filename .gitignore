@@ -40,5 +40,5 @@ application.yml
 todoSetting.zip
 
 # Firebase
-src/main/resources/firebase_todo_list.json
+src/main/resources/firebase.json
 
